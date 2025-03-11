@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Media Capabilities API Sample</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/WebSharper.MediaCapabilities.Sample.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+    </style>
+    <script type="module" src="Content/WebSharper.MediaCapabilities.Sample.head.js"></script>
+</head>
+<body>
+    <h1>Media Capabilities API</h1>
+    <div id="main" ws-children-template="Main">
+        <button ws-onclick="CheckMedia">Check Video Support</button>
+        <p id="result">${Result}</p>
+    </div>
+    <script type="module" src="Content/WebSharper.MediaCapabilities.Sample.min.js"></script>
+</body>
+</html>
