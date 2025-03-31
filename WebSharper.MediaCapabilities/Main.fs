@@ -89,23 +89,9 @@ module Definition =
             "decodingInfo" => MediaDecodingConfig?config ^-> T<Promise<_>>[MediaCapabilitiesInfo]
         ]
 
-    let Navigator = 
-        Class "Navigator"
-        |+> Instance [
-            "mediaCapabilities" =? MediaCapabilities
-        ]
-
-    let WorkerNavigator = 
-        Class "WorkerNavigator"
-        |+> Instance [
-            "mediaCapabilities" =? MediaCapabilities
-        ]
-
     let Assembly =
         Assembly [
             Namespace "WebSharper.MediaCapabilities" [
-                WorkerNavigator
-                Navigator
                 MediaCapabilities
                 MediaCapabilitiesInfo
                 MediaEncodingConfig

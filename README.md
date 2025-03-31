@@ -72,7 +72,6 @@ module Client =
     type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
 
     let resultMessage = Var.Create "Click the button to check video playback capabilities."
-    let navigator = As<Navigator>(JS.Window.Navigator)
 
     let checkMedia () =
         promise {
@@ -93,7 +92,7 @@ module Client =
 
             try
                 // Check media capabilities
-                let! result = navigator.MediaCapabilities.DecodingInfo(mediaConfig)
+                let! result = JS.Window.Navigator.MediaCapabilities.DecodingInfo(mediaConfig)
                 let supported = result.Supported
                 let smooth = result.Smooth
                 let powerEfficient = result.PowerEfficient

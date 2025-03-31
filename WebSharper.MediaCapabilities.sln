@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.MediaCapabilities", "WebSharper.MediaCapabilities\WebSharper.MediaCapabilities.fsproj", "{4D36F6DC-C0A4-4043-AB4D-040C11BEAF35}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.MediaCapabilities.Sample", "WebSharper.MediaCapabilities.Sample\WebSharper.MediaCapabilities.Sample.fsproj", "{7568D2C9-DAAD-46B2-8CAE-0CEE09C1BA33}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebSharper.MediaCapabilities.Extensions", "WebSharper.MediaCapabilities.Extensions\WebSharper.MediaCapabilities.Extensions.fsproj", "{9295DFAD-A515-4E1F-B8D4-51416CF089A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7568D2C9-DAAD-46B2-8CAE-0CEE09C1BA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7568D2C9-DAAD-46B2-8CAE-0CEE09C1BA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7568D2C9-DAAD-46B2-8CAE-0CEE09C1BA33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9295DFAD-A515-4E1F-B8D4-51416CF089A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9295DFAD-A515-4E1F-B8D4-51416CF089A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9295DFAD-A515-4E1F-B8D4-51416CF089A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9295DFAD-A515-4E1F-B8D4-51416CF089A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
