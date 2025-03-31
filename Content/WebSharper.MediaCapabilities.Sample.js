@@ -28,7 +28,7 @@ function checkMedia(){
     const resultElement=globalThis.document.getElementById("result");
     const mediaConfig=(r={},r.type="file",r.video=(r_1={},r_1.contentType="video/mp4; codecs=avc1.42E01E",r_1.width=1920,r_1.height=1080,r_1.bitrate=5000000,r_1.framerate=30,r_1),r);
     let _3=new Promise((_4) => {
-      _4(navigator().mediaCapabilities.decodingInfo(mediaConfig).then((d) => {
+      _4(globalThis.navigator.mediaCapabilities.decodingInfo(mediaConfig).then((d) => {
         resultElement.innerHTML="\u2705 Supported: "+String(d.supported)+"<br>\u2705 Smooth: "+String(d.smooth)+"<br>\u2705 Power Efficient: "+String(d.powerEfficient);
         return Promise.resolve(null);
       }));
@@ -39,9 +39,6 @@ function checkMedia(){
     });
     _2(_3);
   });
-}
-function navigator(){
-  return _c.navigator;
 }
 function FailWith(msg){
   throw new Error(msg);
@@ -369,11 +366,9 @@ let _c=Lazy((_i) => class $StartupCode_Client {
   static {
     _c=_i(this);
   }
-  static navigator;
   static resultMessage;
   static {
     this.resultMessage=_c_1.Create_1("Click the button to check video playback capabilities.");
-    this.navigator=globalThis.navigator;
   }
 });
 function NewGuid(){
@@ -510,13 +505,13 @@ function Start(c, ctOpt){
     }, ct));
   });
 }
-class Exception extends Object_1 { }
 function GetFieldValues(o){
   let r=[];
   let k;
   for(var k_1 in o)r.push(o[k_1]);
   return r;
 }
+class Exception extends Object_1 { }
 function Some(Value_1){
   return{$:1, $0:Value_1};
 }
