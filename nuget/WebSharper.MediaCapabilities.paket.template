@@ -15,8 +15,10 @@ tags
     Web JavaScript F# C#
 files
     ../WebSharper.MediaCapabilities.Extensions/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.MediaCapabilities.Extensions/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.Extensions.websharper ==> lib/netstandard2.0
     ../WebSharper.MediaCapabilities.Extensions/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.Extensions.xml ==> lib/netstandard2.0
     ../WebSharper.MediaCapabilities/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.dll ==> lib/netstandard2.0
+    ../WebSharper.MediaCapabilities/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.websharper ==> lib/netstandard2.0
     ../WebSharper.MediaCapabilities/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
