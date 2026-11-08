@@ -1,0 +1,22 @@
+type file
+id WebSharper.MediaCapabilities
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+repositoryType git
+repositoryUrl https://github.com/dotnet-websharper/MediaCapabilities/
+licenseUrl https://github.com/dotnet-websharper/MediaCapabilities/blob/main/LICENSE.md
+iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
+projectUrl https://github.com/dotnet-websharper/MediaCapabilities
+description
+    WebSharper bindings for MediaCapabilities
+tags
+    Web JavaScript F# C#
+files
+    ../WebSharper.MediaCapabilities.Extensions/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.MediaCapabilities.Extensions/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.Extensions.xml ==> lib/netstandard2.0
+    ../WebSharper.MediaCapabilities/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.dll ==> lib/netstandard2.0
+    ../WebSharper.MediaCapabilities/bin/Release/netstandard2.0/WebSharper.MediaCapabilities.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper ~> LOCKEDVERSION:[3]

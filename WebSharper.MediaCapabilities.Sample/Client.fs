@@ -3,55 +3,52 @@
 open WebSharper
 open WebSharper.JavaScript
 open WebSharper.UI
+open WebSharper.UI.Notation
 open WebSharper.UI.Client
 open WebSharper.UI.Templating
 open WebSharper.MediaCapabilities
 
 [<JavaScript>]
 module Client =
-    // The templates are loaded from the DOM, so you just can edit index.html
-    // and refresh your browser, no need to recompile unless you add or remove holes.
+    // The template is loaded from the DOM, so editing index.html and refreshing
+    // the browser is enough; a rebuild is only needed when holes change.
     type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
 
-    let resultMessage = Var.Create "Click the button to check video playback capabilities."
+    let status = Var.Create "Click the button to check video playback capabilities."
+    let supported = Var.Create "—"
+    let smooth = Var.Create "—"
+    let powerEfficient = Var.Create "—"
 
     let checkMedia () =
         promise {
-            
-            let resultElement = JS.Document.GetElementById("result")
-
-            let mediaConfig = MediaDecodingConfig(
-                Type = "file",
-                Video = VideoInfo(
-                    ContentType = "video/mp4; codecs=avc1.42E01E",
-                    Width = 1920,
-                    Height = 1080,
-                    Bitrate = 5000000, // 5 Mbps
-                    Framerate = 30
+            let config =
+                MediaDecodingConfig(
+                    Type = "file",
+                    Video = VideoInfo(
+                        ContentType = "video/mp4; codecs=avc1.42E01E",
+                        Width = 1920,
+                        Height = 1080,
+                        Bitrate = 5000000,
+                        Framerate = 30
+                    )
                 )
-            )
 
             try
-                let! result = JS.Window.Navigator.MediaCapabilities.DecodingInfo(mediaConfig)
-                let supported = result.Supported
-                let smooth = result.Smooth
-                let powerEfficient = result.PowerEfficient
-
-                resultElement.InnerHTML <- 
-                    $"✅ Supported: {supported}<br>✅ Smooth: {smooth}<br>✅ Power Efficient: {powerEfficient}"
+                let! result = JS.Window.Navigator.MediaCapabilities.DecodingInfo(config)
+                supported := string result.Supported
+                smooth := string result.Smooth
+                powerEfficient := string result.PowerEfficient
+                status := "Media capabilities checked."
             with ex ->
-                resultMessage.Value <- $"❌ Error: {ex.Message}"
+                status := $"Error: {ex.Message}"
         }
 
     [<SPAEntryPoint>]
     let Main () =
-        IndexTemplate.Main()
-            .CheckMedia(fun _ -> 
-                async {
-                    do! checkMedia () |> Promise.AsAsync
-                }
-                |> Async.StartImmediate
-            )
-            .Result(resultMessage.V)
-            .Doc()
-        |> Doc.RunById "main"
+        IndexTemplate()
+            .checkMedia(fun _ -> checkMedia () |> ignore)
+            .status(status.V)
+            .supported(supported.V)
+            .smooth(smooth.V)
+            .powerEfficient(powerEfficient.V)
+            .Bind()
