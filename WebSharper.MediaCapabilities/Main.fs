@@ -10,14 +10,30 @@ module Definition =
         Pattern.Config "AudioConfig" {
             Required = []
             Optional = [
+                "contentType", T<string>
+                "channels", T<int>
+                "bitrate", T<int>
+                "samplerate", T<int>
+                "spatialRendering", T<bool>
                 "encryptionScheme", T<string>
                 "robustness", T<string>
             ]
         }
 
     let VideoConfig = 
-        Class "VideoConfig"
-        |=> Inherits AudioConfig
+        Pattern.Config "VideoConfig" {
+            Required = []
+            Optional = [
+                "contentType", T<string>
+                "width", T<int>
+                "height", T<int>
+                "bitrate", T<int>
+                "framerate", T<int>
+                "hasAlpha", T<bool>
+                "encryptionScheme", T<string>
+                "robustness", T<string>
+            ]
+        }
 
     let MediaKeySystemConfig =
         Pattern.Config "MediaKeySystemConfig" {
@@ -68,8 +84,15 @@ module Definition =
         }
 
     let MediaEncodingConfig =
-        Class "MediaEncodingConfig"
-        |=> Inherits MediaDecodingConfig
+        Pattern.Config "MediaEncodingConfig" {
+            Required = []
+            Optional = [
+                "type", T<string>
+                "video", VideoInfo.Type
+                "audio", AudioInfo.Type
+                "keySystemConfiguration", MediaKeySystemConfig.Type
+            ]
+        }
 
     let MediaCapabilitiesInfo =
         Pattern.Config "MediaCapabilitiesInfo" {

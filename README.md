@@ -1,125 +1,149 @@
-# WebSharper Media Capabilities API Binding
+# WebSharper.MediaCapabilities
 
-This repository provides an F# [WebSharper](https://websharper.com/) binding for the [Media Capabilities API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Capabilities_API), enabling WebSharper applications to assess the playback capabilities of different media formats.
+[![NuGet](https://img.shields.io/badge/nuget-not%20published-lightgrey)](https://github.com/dotnet-websharper/MediaCapabilities)
 
-## Repository Structure
+WebSharper bindings for the [Media Capabilities API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Capabilities_API) —
+asking the browser whether it can decode or encode a media configuration from F# and C# web apps.
 
-The repository consists of two main projects:
+This repository contains:
 
-1. **Binding Project**:
+| Project | Purpose |
+| --- | --- |
+| `WebSharper.MediaCapabilities` | The binding: WIG definitions for `MediaCapabilities`, `MediaCapabilitiesInfo`, `MediaDecodingConfig`, `MediaEncodingConfig`, `AudioInfo`, `VideoInfo`, `AudioConfig`, `VideoConfig`, and `MediaKeySystemConfig`. |
+| `WebSharper.MediaCapabilities.Extensions` | `[<Inline>]` client extensions: `Navigator.MediaCapabilities` and `WorkerNavigator.MediaCapabilities`. |
+| `WebSharper.MediaCapabilities.Sample` | An ASP.NET Core SPA that checks a 1080p video configuration. |
 
-   - Contains the F# WebSharper binding for the Media Capabilities API.
+## Live demos
 
-2. **Sample Project**:
-   - Demonstrates how to use the Media Capabilities API with WebSharper syntax.
-   - Includes a GitHub Pages demo: [View Demo](https://dotnet-websharper.github.io/MediaCapabilities/)
+**Try it live:** [Open the sample in your browser](https://dotnet-websharper.github.io/MediaCapabilities/)
+
+![Media Capabilities API sample](docs/sample.png)
+
+The sample doubles as the binding's test case: it calls `decodingInfo()` and reports whether the configuration is
+supported, smooth, and power efficient.
+
+- **Sample (this repository):** <https://dotnet-websharper.github.io/MediaCapabilities/>
+- **Source repository:** <https://github.com/dotnet-websharper/MediaCapabilities>
+- **WebSharper bindings:** <https://websharper.com/bindings>
+
+## Features
+
+- `MediaCapabilities.decodingInfo()` and `MediaCapabilities.encodingInfo()`.
+- `MediaCapabilitiesInfo` (`supported`, `smooth`, `powerEfficient`, `keySystemAccess`).
+- `MediaDecodingConfig` and `MediaEncodingConfig` with `type`, `audio`, `video`, and `keySystemConfiguration`.
+- `VideoInfo` and `AudioInfo` (`contentType`, `width`, `height`, `bitrate`, `framerate`, `channels`, `samplerate`).
+- `AudioConfig` / `VideoConfig` for `MediaKeySystemConfig` (`keySystem`, `initDataType`, `distinctiveIdentifier`, `persistentState`, `sessionTypes`, `audio`, `video`).
 
 ## Installation
 
-To use this package in your WebSharper project, add the NuGet package:
+The binding is not currently published to NuGet. Reference the projects from source:
 
 ```bash
-   dotnet add package WebSharper.MediaCapabilities
+git clone https://github.com/dotnet-websharper/MediaCapabilities.git
 ```
 
-## Building
+```xml
+<ItemGroup>
+  <ProjectReference Include="path/to/WebSharper.MediaCapabilities/WebSharper.MediaCapabilities.fsproj" />
+  <ProjectReference Include="path/to/WebSharper.MediaCapabilities.Extensions/WebSharper.MediaCapabilities.Extensions.fsproj" />
+</ItemGroup>
+```
 
-### Prerequisites
-
-- [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
-
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/dotnet-websharper/MediaCapabilities.git
-   cd MediaCapabilities
-   ```
-
-2. Build the Binding Project:
-
-   ```bash
-   dotnet build WebSharper.MediaCapabilities/WebSharper.MediaCapabilities.fsproj
-   ```
-
-3. Build and Run the Sample Project:
-
-   ```bash
-   cd WebSharper.MediaCapabilities.Sample
-   dotnet build
-   dotnet run
-   ```
-
-## Example Usage
-
-Below is an example of how to use the Media Capabilities API in a WebSharper project:
+## Usage
 
 ```fsharp
-namespace WebSharper.MediaCapabilities.Sample
+namespace WebSharper.MediaCapabilities.Demo
 
 open WebSharper
 open WebSharper.JavaScript
-open WebSharper.UI
-open WebSharper.UI.Client
-open WebSharper.UI.Templating
 open WebSharper.MediaCapabilities
 
 [<JavaScript>]
-module Client =
-    // The templates are loaded from the DOM, so you just can edit index.html
-    // and refresh your browser, no need to recompile unless you add or remove holes.
-    type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
-
-    let resultMessage = Var.Create "Click the button to check video playback capabilities."
-
+module Demo =
     let checkMedia () =
         promise {
-            // Reference to the result display element
-            let resultElement = JS.Document.GetElementById("result")
-
-            // Define media configuration for decoding check
-            let mediaConfig = MediaDecodingConfig(
-                Type = "file",
-                Video = VideoInfo(
-                    ContentType = "video/mp4; codecs=avc1.42E01E",
-                    Width = 1920,
-                    Height = 1080,
-                    Bitrate = 5000000, // 5 Mbps
-                    Framerate = 30
+            let config =
+                MediaDecodingConfig(
+                    Type = "file",
+                    Video = VideoInfo(
+                        ContentType = "video/mp4; codecs=avc1.42E01E",
+                        Width = 1920,
+                        Height = 1080,
+                        Bitrate = 5000000,
+                        Framerate = 30
+                    )
                 )
-            )
 
-            try
-                // Check media capabilities
-                let! result = JS.Window.Navigator.MediaCapabilities.DecodingInfo(mediaConfig)
-                let supported = result.Supported
-                let smooth = result.Smooth
-                let powerEfficient = result.PowerEfficient
-
-                // Update the UI with results
-                resultElement.InnerHTML <-
-                    $"✅ Supported: {supported}<br>✅ Smooth: {smooth}<br>✅ Power Efficient: {powerEfficient}"
-            with ex ->
-                resultMessage.Value <- $"❌ Error: {ex.Message}"
+            let! result = JS.Window.Navigator.MediaCapabilities.DecodingInfo(config)
+            Console.Log($"Supported: {result.Supported}, Smooth: {result.Smooth}, Power efficient: {result.PowerEfficient}")
         }
-
-    [<SPAEntryPoint>]
-    let Main () =
-        IndexTemplate.Main()
-            .CheckMedia(fun _ ->
-                async {
-                    do! checkMedia () |> Promise.AsAsync
-                }
-                |> Async.StartImmediate
-            )
-            .Result(resultMessage.V)
-            .Doc()
-        |> Doc.RunById "main"
 ```
 
-## Important Considerations
+The `Navigator.MediaCapabilities` and `WorkerNavigator.MediaCapabilities` extensions are declared in the Extensions
+assembly.
 
-- **Limited Browser Support**: Some browsers may not fully support the Media Capabilities API; check [MDN Media Capabilities API](https://developer.mozilla.org/en-US/docs/Web/API/Media_Capabilities_API) for compatibility details.
-- **Performance Impact**: Checking media capabilities dynamically may introduce minor latency.
-- **Use Cases**: Helps developers optimize media playback by selecting the best format for the user's device.
+## Running the sample
+
+Build the sample in Release and serve its static output:
+
+```bash
+dotnet build WebSharper.MediaCapabilities.Sample/WebSharper.MediaCapabilities.Sample.fsproj -c Release
+python3 -m http.server -d WebSharper.MediaCapabilities.Sample/wwwroot 8099
+```
+
+Open <http://localhost:8099/> and click **Check video support** to see the result.
+
+Alternatively, run the ASP.NET Core host:
+
+```bash
+dotnet run --project WebSharper.MediaCapabilities.Sample
+```
+
+## Building from source
+
+### Prerequisites
+
+- [.NET SDK 10](https://dotnet.microsoft.com/download) or later.
+
+### Build
+
+```bash
+dotnet build WebSharper.MediaCapabilities.sln -c Release
+```
+
+The binding projects target `netstandard2.0`; the sample targets `net10.0`.
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/ghpages.yml`, which builds the sample in Release and publishes
+`WebSharper.MediaCapabilities.Sample/wwwroot` to the `gh-pages` branch.
+
+## Repository layout
+
+```
+WebSharper.MediaCapabilities/              # binding (WIG definitions)
+  Main.fs
+WebSharper.MediaCapabilities.Extensions/   # [<Inline>] client extensions
+  Library.fs
+WebSharper.MediaCapabilities.Sample/       # ASP.NET Core SPA demo
+  Client.fs
+  Startup.fs
+  wwwroot/
+    index.html
+    site.css
+.github/workflows/ghpages.yml              # build + deploy the sample to GitHub Pages
+```
+
+## Notes on the API
+
+- **Configuration:** `MediaDecodingConfig` and `MediaEncodingConfig` are dictionaries. Set `type` to `"file"` or
+  `"media-source"`, and fill `audio` or `video` with the matching `AudioInfo` / `VideoInfo`.
+- **Result:** `MediaCapabilitiesInfo` reports `supported`, `smooth`, and `powerEfficient`. These are hints; the
+  browser may still choose a different decoder at playback time.
+- **Key systems:** `keySystemConfiguration` describes an EME key system (for example Widevine) for the configuration.
+- **Browser support:** the Media Capabilities API is not available in every browser; check the MDN compatibility
+  table and handle the missing `navigator.mediaCapabilities`.
+
+## License
+
+Apache 2.0 — see [LICENSE.md](LICENSE.md).
