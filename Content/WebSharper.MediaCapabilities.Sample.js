@@ -33,16 +33,16 @@ function checkMedia(){
     let r, r_1;
     const config=(r={},r.type="file",r.video=(r_1={},r_1.contentType="video/mp4; codecs=avc1.42E01E",r_1.width=1920,r_1.height=1080,r_1.bitrate=5000000,r_1.framerate=30,r_1),r);
     let _2=new Promise((_3) => {
-      _3(globalThis.navigator.mediaCapabilities.decodingInfo(config).then((d) => {
-        supported().Set(String(d.supported));
-        smooth().Set(String(d.smooth));
-        powerEfficient().Set(String(d.powerEfficient));
+      _3(globalThis.navigator.mediaCapabilities.decodingInfo(config).then((a) => {
+        supported().Set(String(a.supported));
+        smooth().Set(String(a.smooth));
+        powerEfficient().Set(String(a.powerEfficient));
         status().Set("Media capabilities checked.");
         return Promise.resolve(null);
       }));
-    })["catch"]((d) => {
-      const a=unwrapExn(d);
-      status().Set("Error: "+a.message);
+    })["catch"]((a) => {
+      const a_1=unwrapExn(a);
+      status().Set("Error: "+a_1.message);
       return Promise.resolve(null);
     });
     _1(_2);
@@ -2957,7 +2957,7 @@ class Event extends TemplateHole {
 }
 function Handler(name, callback){
   return Attr.A3((el) => {
-    el.addEventListener(name, (d) =>(callback(el))(d), false);
+    el.addEventListener(name, (o) =>(callback(el))(o), false);
   });
 }
 function OnAfterRender(callback){
@@ -2994,7 +2994,7 @@ function DynamicCustom(set_1, view){
 class Attr {
   static HandlerImpl(event, q){
     return Attr.A3((el) => {
-      el.addEventListener(event, (d) =>(q(el))(d), false);
+      el.addEventListener(event, (o) =>(q(el))(o), false);
     });
   }
   static Concat(xs){
